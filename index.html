@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Валидация</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="CSS/style.css" />
+
+</head>
+<body>
+
+	<header>
+		<h2 class="center text">Контакты</h2>
+		<p class="center">Внесите данные в текстовые поля</p>
+	</header>
+	<form method="post" action="#">
+	<div class="center brd">
+			<div>
+				<label class="center">Имя
+				<ul class="center"><input type="text" class="pole" name="name" id="name" value="" placeholder="name" pattern="[A-Za-zА-Яа-яЁё]{2,20}"required/></ul>
+				</label>
+			</div>
+				<div>
+				<label>Фамилия
+					<ul class="center"><input type="text" class="pole" name="surname" id="surname" value="" placeholder="surname" pattern="[A-Za-zА-Яа-яЁё]{2,20}" required/></ul>
+				</label>
+				</div>
+				<div>
+					<label>Email
+						<ul class="center"><input type="email" class="pole" name="email" id="email" value="" placeholder="Email" pattern="([A-z0-9_.-]{1,})@([A-z0-9_.-]{1,}).([A-z]{2,8})" required/></ul>
+					</label>
+				</div>
+			<div>
+				<label>Телефон
+					<ul class="center"><input type="tel" class="pole" name="phone" id="phone" placeholder="phone" pattern="\+7\-[0-9]{3}\-[0-9]{3}\-[0-9]{2}\-[0-9]{2}" required/></ul>
+				</label>
+			</div>
+			<div>
+				<input type="submit" class="button center" value="Отправить"/>
+			</div>
+	</div>
+		</form>
+	</div>
+</body>
+</html>
