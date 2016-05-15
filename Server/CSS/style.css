@@ -1,0 +1,31 @@
+.pole 
+{
+/*-moz-border-radius: 7px;
+-webkit-border-radius: 7px;
+-khtml-border-radius: 7px;*/
+border-radius: 7px; /* Ну то есть для всех углов сразу задается одним значением  */
+}
+body {
+	font-family: Helvetica;
+	font-size: 18px;
+}
+.button {
+  font-size: 100%;
+
+  font-weight: 700;
+  color: rgb(209,209,217);
+  border-radius: 6px;
+  background: linear-gradient(rgb(110,112,120), rgb(81,81,86)) rgb(110,112,120);
+}
+.center {
+    width: 200px; /* Ширина элемента в пикселах */
+    padding: 10px; /* Поля вокруг текста */
+    margin: auto; /* Выравниваем по центру */
+   }
+.brd {
+    border: 4px double black; /* Параметры границы */
+    background: #EFEDE6; /* Цвет фона */
+    padding: 10px; /* Поля вокруг текста */
+	border-radius: 7px; /* Ну то есть для всех углов сразу задается одним значением  */
+
+   }
