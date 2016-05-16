@@ -1,14 +1,4 @@
 <?php
-  require_once 'connect.php';
-
-  // Определим собственный класс исключений для ошибок MySQL
-  class MySQL_Exception extends Exception {
-    public function __construct($message) {
-      parent::__construct($message);
-    }
-  }
-?>
-<?php
 header("Content-Type: text/html; charset=utf-8"); 
 session_start();
 $_SESSION['test'] = $_SERVER['REMOTE_ADDR']; 
@@ -45,7 +35,7 @@ $_SESSION['test'] = $_SERVER['REMOTE_ADDR'];
 	</div>
 	<div>
 		<label class="center">Сообщение
-			<ul class="center"><br /><textarea name="message" value="<?php echo $_SESSION['messageR']; $_SESSION['messageR'] = '';?>" class="pole" cols="25" rows="5" pattern="[A-Za-zА-Яа-я]{2,150}" required></textarea></ul>
+			<ul class="center"><br /><textarea name="message" value="<?php echo $_SESSION['messageR']; $_SESSION['messageR'] = '';?>" class="pole" cols="23" rows="5" pattern="[A-Za-zА-Яа-я]{2,150}" required></textarea></ul>
 		</label>
 	</div>
 <p><input type='submit' class="button center" value='Отправить'></p>
