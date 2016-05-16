@@ -3,32 +3,30 @@ header("Content-Type: text/html; charset=utf-8");
 session_start();
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if ($_SESSION['test'] == $_SERVER['REMOTE_ADDR']) {
-    $name = $_POST['name'];
-	$surname = $_POST['surname'];
-	$email = $_POST['email'];
-	$message = $_POST['message'];
+    $name = $surname = $email = $message = '';
+	$_SESSION['nameR'] = $_POST["name"];
+	$_SESSION['surnameR'] = $_POST["surname"];
+	$_SESSION['emailR'] = $_POST["email"];
+	$_SESSION['messageR'] = $_POST["message"];
 	$_SESSION['error'] = '';
 	$flag = true;
-	$surname = clean($surname);
-	$email = clean($email);
-	$message = clean($message);
-	if (!empty($name) && check_length($name, 2, 25))
+	if (!empty($_POST["name"]) && check_length($name, 2, 20))
 		{
-			$name = clean($name);
+			$name = clean($_POST['name']);
 		}
 	else
 		{
 			$flag = false;
 			$_SESSION['error'] = 'Ошибка! Недопустимое значение в поле Имя';
 		}
-		if (!empty($surname) && check_length($surname, 2, 25))
+		if (!empty($_POST["surname"]) && check_length($surname, 2, 50))
 		{
-			$surname = clean($surname);
+			$surname = clean($_POST['surname']);
 		}
 	else
 		{
 			$flag = false;
-			$_SESSION['error'] = "Ошибка! Недопустимое значение в поле Фамилия";
+			$_SESSION['error'] = "Ошибка! Недопустимое значение в поле Фамилия".$_POST["surname"];
 		}
 	if (!empty($_POST["email"]) && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL))
 		{
@@ -39,9 +37,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$flag = false;
 			$_SESSION['error'] = 'Ошибка! Недопустимое значение в поле Email';
 		}
-		if(!empty($message) && check_length($message, 2, 25))
+		if(empty($message) || check_length($message, 2, 150))
 		{
-			$message = clean($message);
+			$message = $_POST['message'];
 		}
 	else
 		{
@@ -50,6 +48,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	if($flag == true)
 		{
+			$_SESSION['error'] = 'Благодарим за регистрацию!'; 
 			$fp = fopen('file.txt', 'a+');
 			fwrite($fp, $name . "\n");
 			fwrite($fp, $surname . "\n");
@@ -60,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	}
 }
-else {$_SESSION['message'] = 'Ошибка доступа';}
+else {$_SESSION['error'] = 'Ошибка доступа';}
 $back = $_SERVER['HTTP_REFERER'];
 		echo "
 		<html>
@@ -77,7 +76,6 @@ function clean($value = "") {
 }
 function check_length($value = "", $min, $max) {
     $result = (mb_strlen($value) < $min || mb_strlen($value) > $max);
-    return !$result;
+    return $result;
 }
-
 ?>
