@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Валидация на стороне сервера</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="CSS/style.css" />
+</head>
+<body>
+
+<section>
+		<h2 class="center text">Контакты</h2>
+		<p class="center">Внесите данные в текстовые поля</p>
+<form method="post" action="<?=htmlspecialchars($_SERVER["PHP_SELF"])?>">
+	<div class="center brd">
+	<div>
+		<label for="name" class="center">Имя</label>
+		<input type="text" name="name" required placeholder="Андрей" pattern="[А-Я]{1}[а-я]{1,20}" value="<?=$name?>" maxlength="60">
+			<span class="error"><?=$usernameErr?></span>
+	</div>
+	<div>
+		<label class="center">Фамилия
+			<ul class="center"><input name="surname" type="text" class="pole" id="surname" value="<?=$surname;?>" placeholder="surname" pattern="[A-Za-zА-Яа-я]{2,50}" required/></ul>
+		</label>
+	<div>
+		<label class="center">Email
+			<ul class="center"><input name="email" type="text" class="pole" id="email" value="<?=$email;?>" placeholder="Email" pattern="([A-z0-9_.-]{1,})@([A-z0-9_.-]{1,}).([A-z]{2,8})" maxlength="60" required/></ul>
+		</label>
+	</div>
+	<div>
+		<label class="center">Сообщение
+			<ul class="center"><br /><textarea name="message" value="<?=$message?>" class="pole" cols="25" rows="5" pattern="[A-Za-zА-Яа-я]{2,150}" required></textarea></ul>
+		</label>
+	</div>
+			<input type="hidden" name="token" value="<?=$_SESSION['token']?>" />
+  			<input type="submit" class="button center" value="Оставить отзыв">
+	</div>
+<br>
+      <?php
+      echo $_SESSION['error'];
+      $_SESSION['error'] = '';
+      ?>
+</form>
+</section>
+</body>
+</html>
