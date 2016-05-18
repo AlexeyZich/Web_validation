@@ -1,12 +1,17 @@
 <?php
-  require_once '../connect.php';
-
-  // Определим собственный класс исключений для ошибок MySQL
-  class MySQL_Exception extends Exception {
-    public function __construct($message) {
-      parent::__construct($message);
-    }
-  }
+	error_reporting(0);
+	$db_host = 'localhost';
+	$db_user = 'root';
+	$db_password = 'root';
+	$db_name = 'lab4';
+	
+	$link = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+	if (!$link) {
+    	die('<p style="color:red">'.mysqli_connect_errno().' - '.mysqli_connect_error().'</p>');
+	}
+		mysqli_query($link, "SET NAMES utf8");
+		
+	echo "<p>Успешное подключение!</p>";
 header("Content-Type: text/html; charset=utf-8");
 session_start();
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -65,22 +70,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 	if($flag == true)
 		{
-	    	if(isset($_POST['go']))
-	    	{
-		      $named = $_POST['name'];
-		      $surname = $_POST['surname'];
-		      $email = $_POST['email'];
-		      $message = $_POST['message'];
-		      try {
-		      $result1 = $link->query("INSERT INTO registration (name, surname, email, message, id) " .
-		      "VALUES ('$named', '$surname', '$email', '$message', 'NULL')");
-		        if (!$result1) throw new MySQL_Exception($link->error);
-		      }
-		       catch (Exception $ex) {
-		       echo 'Ошибка при работе с MySQL: <b style="color:red;">'.$ex->getMessage().'</b>';
-		      }
-		    }
+			$stmt = $link->prepare("INSERT INTO registration (name, surname, email, message) VALUES (?, ?, ?, ?)");
+			$stmt->bind_param("ssss", $name, $surname, $email, $message);
+			$stmt->execute();
 		}
+	
 }
 else {$_SESSION['error'] = 'Ошибка доступа';}
 $back = $_SERVER['HTTP_REFERER'];
@@ -90,5 +84,4 @@ $back = $_SERVER['HTTP_REFERER'];
   		<meta http-equiv='Refresh' content='0; URL=".$_SERVER['HTTP_REFERER']."'>
   		</head>
 		</html>";
-
 ?>
