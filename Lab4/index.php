@@ -1,87 +1,50 @@
 <?php
-$nameErr = $surnameErr = $emailErr = $messageErr = "";
-$name = $surname = $email = $message = "";
-$dbservername = "localhost";
-$dbusername = "root";
-$dbpassword = "root";
-$dbname = "lab4";
-$isValid = 1;
+header("Content-Type: text/html; charset=utf-8"); 
 session_start();
-$conn = new mysqli($dbservername, $dbusername, $dbpassword, $dbname);
-if ($conn->connect_error) {
-    die("Ошибка соединения с БД: " . $conn->connect_error);
-}
-if (!isset($_SESSION['token'])) {
-	$_SESSION['token'] = md5(uniqid(rand(), TRUE));
-}
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if ($_POST['token'] != $_SESSION['token']) {
-		$isValid = 0;
-	}
-	if (empty($_POST["name"])) {
-		$nameErr = "Укажите имя";
-		$isValid = 0;
-	} else {
-		$name = validate($_POST["surname"]);
-		if (strlen($name) > 60){
-			$nameErr = "Превышен лимит";
-			$isValid = 0;
-		}
-		if (!preg_match("/^[А-Я][а-я]*/", $name)) {
-			$nameErr = "Неверный формат"; 
-			$isValid = 0;
-		}
-	}
-	if (empty($_POST["surname"])) {
-		$surnameErr = "Укажите Фамилию";
-		$isValid = 0;
-	} else {
-		$surname = validate($_POST["surname"]);
-		if (strlen($surname) > 60){
-			$surnameErr = "Превышен лимит";
-			$isValid = 0;
-		}
-		if (!preg_match("/^[А-Я][а-я]*/", $surname)) {
-			$surnameErr = "Неверный формат"; 
-			$isValid = 0;
-		}
-	}
-	if (empty($_POST["email"])) {
-		$emailErr = "Укажите e-mail";
-		$isValid = 0;
-	} else {
-		$email = validate($_POST["email"]);
-		if (strlen($email) > 60) {
-			$emailErr = "Превышен лимит";
-			$isValid = 0;
-		}
-		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$emailErr = "Неверный формат"; 
-			$isValid = 0;
-		}
-	}
-	if (empty($_POST["message"])) {
-		$messageErr = "Напишите отзыв";
-		$isValid = 0;
-	} else {
-		$message = validate($_POST["message"]);
-		if (strlen($message) > 500) {
-			$messageErr = "Превышен лимит";
-			$isValid = 0;
-		}
-	}
-	if ($isValid) {
-		$stmt = $conn->prepare("INSERT INTO registr (name, surname, email, message) VALUES (?, ?, ?, ?)");
-		$stmt->bind_param("sss", $name, $surname, $email, $message);
-		$stmt->execute();
-	}
-}
-function validate($data) {
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
-}
-include('index.html');
-$conn->close();
+$_SESSION['test'] = $_SERVER['REMOTE_ADDR']; 
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Валидация на стороне сервера</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="CSS/style.css" />
+</head>
+<body>
+
+	<header>
+		<h2 class="center text">Контакты</h2>
+		<p class="center">Внесите данные в текстовые поля</p>
+	</header>
+<form action="app/check.php" method="post" action="index.php">
+<div class="center brd">
+
+	<div>
+		<label class="center">Имя 
+			<ul class="center"><input name="name" type="text" class="pole" id="name" value="<?php echo $_SESSION['nameR']; $_SESSION['nameR'] = '';?>" placeholder="name" pattern="[A-Za-zА-Яа-я]{2,20}" required/></ul>
+		</label>
+	</div>
+	<div>
+		<label class="center">Фамилия
+			<ul class="center"><input name="surname" type="text" class="pole" id="surname" value="<?php echo $_SESSION['surnameR']; $_SESSION['surnameR'] = '';?>" placeholder="surname" pattern="[A-Za-zА-Яа-я]{2,50}" required/></ul>
+		</label>
+	<div>
+		<label class="center">Email
+			<ul class="center"><input name="email" type="text" class="pole" id="email" value="<?php echo $_SESSION['emailR']; $_SESSION['emailR'] = '';?>" placeholder="Email" pattern="([A-z0-9_.-]{1,})@([A-z0-9_.-]{1,}).([A-z]{2,8})" required/></ul>
+		</label>
+	</div>
+	<div>
+		<label class="center">Сообщение
+			<ul class="center"><br /><textarea name="message" value="<?php echo $_SESSION['messageR']; $_SESSION['messageR'] = '';?>" class="pole" cols="23" rows="5" pattern="[A-Za-zА-Яа-я]{2,150}" required></textarea></ul>
+		</label>
+	</div>
+<p><input type='submit' class="button center" value='Отправить'></p>
+</div>
+<br>
+      <?php 
+      echo $_SESSION['error'];
+      $_SESSION['error'] = ''; 
+      ?>
+</form>
+</body>
+</html>
